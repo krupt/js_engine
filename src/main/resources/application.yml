@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    hikari:
+      username: postgres
+      password: зщыепкуы
+    url: jdbc:postgresql:js_engine
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        generate_statistics: true
+        format_sql: true
+        use_second_level_cache: true
+        cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+    show-sql: true
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
