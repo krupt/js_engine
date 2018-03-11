@@ -56,6 +56,7 @@ dependencies {
     compile('io.springfox:springfox-swagger-ui:2.8.0')
     compile('org.liquibase:liquibase-core')
     compile('org.hibernate:hibernate-ehcache')
+    compile('org.springframework.data:spring-data-envers')
 
     runtime('org.springframework.boot:spring-boot-devtools')
 

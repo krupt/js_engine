@@ -31,4 +31,9 @@ class CallResource(val callService: CallService) {
     @GetMapping("{callName}/invocationInfo")
     fun getCallInvocationInfo(@PathVariable("callName") callName: String) =
             callService.getCallInvocationInfo(callName)
+
+    @PostMapping("{callName}")
+    fun performCall(@PathVariable("callName") callName: String,
+                    @RequestBody(required = false) inputs: Map<String, Any?>?): Map<String, Any?> =
+            callService.call(callName, inputs ?: emptyMap())
 }

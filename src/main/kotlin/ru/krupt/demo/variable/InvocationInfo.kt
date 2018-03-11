@@ -1,6 +1,11 @@
 package ru.krupt.demo.variable
 
+import javax.validation.Valid
+import javax.validation.constraints.Size
+
 data class InvocationInfo(
-        val inputs: Set<Variable>? = null,
+        @get:Valid
+        val inputs: Set<Variable> = emptySet(),
+        @get:[Size(min = 1) Valid]
         val outputs: Set<Variable>
 )

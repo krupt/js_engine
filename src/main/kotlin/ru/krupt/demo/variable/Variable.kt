@@ -1,18 +1,13 @@
 package ru.krupt.demo.variable
 
+import javax.validation.constraints.NotBlank
+
 data class Variable(
+        @get:NotBlank
         val name: String,
         val required: Boolean = true,
-        val emptyAllowed: Boolean = false,
         val type: DataType
 ) {
-
-    init {
-        if (!emptyAllowed && !required) {
-            throw IllegalArgumentException("Empty allowed check can't be enabled " +
-                    "for non-required variables")
-        }
-    }
 
     override fun toString(): String {
         return "$name: $type" + (if (!required) "?" else "")
