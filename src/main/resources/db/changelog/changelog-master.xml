@@ -26,6 +26,9 @@
       <column name="body" type="text">
         <constraints nullable="false"/>
       </column>
+      <column name="last_modified_time" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
       <column defaultValue="0" name="version" type="int">
         <constraints nullable="false"/>
       </column>
@@ -34,6 +37,60 @@
       <column name="upper(name)"/>
     </createIndex>
     <createSequence incrementBy="50" sequenceName="calls_id_seq" startValue="1"/>
+  </changeSet>
+
+  <changeSet author="a.kovalev" id="create_audit_structure">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="rev_info"/>
+        <sequenceExists sequenceName="rev_info_id_seq"/>
+      </not>
+    </preConditions>
+    <createTable tableName="rev_info">
+      <column name="id" type="bigint">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="timestamp" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createSequence incrementBy="50" sequenceName="rev_info_id_seq"/>
+  </changeSet>
+
+  <changeSet author="a.kovalev" dbms="postgresql" id="create_calls_audit_table">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="calls_aud"/>
+      </not>
+    </preConditions>
+    <createTable tableName="calls_aud">
+      <column name="id" type="bigint"/>
+      <column name="rev" type="bigint"/>
+      <column name="rev_type" type="smallint"/>
+      <column name="name" type="varchar(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="invocation_info" type="jsonb">
+        <constraints nullable="false"/>
+      </column>
+      <column name="body" type="text">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_modified_time" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey columnNames="id, rev" constraintName="calls_aud_pkey"
+      tableName="calls_aud"/>
+    <addForeignKeyConstraint baseColumnNames="rev"
+      baseTableName="calls_aud" constraintName="fk_calls_aud_rev_rev_info"
+      referencedColumnNames="id" referencedTableName="rev_info"/>
   </changeSet>
 
 </databaseChangeLog>
