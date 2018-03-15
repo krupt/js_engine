@@ -48,8 +48,12 @@ data class CallEntity(
 }
 
 /**
- * Extract only invocationInfo to avoid transfer many bytes from database
+ * Extract only light-weight fields to avoid transfer many bytes from database
  */
-interface CallEntityInvocationInfo {
-    fun getInvocationInfo(): InvocationInfo
+interface CallEntityWithoutBody {
+    val id: Long
+    val name: String
+    val description: String
+    val invocationInfo: InvocationInfo
+    val version: Int
 }

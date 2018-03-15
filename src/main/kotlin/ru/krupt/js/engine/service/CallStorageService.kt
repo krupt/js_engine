@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Transactional
 import ru.krupt.js.engine.domain.CallEntity
 import ru.krupt.js.engine.dto.CallFullInfoDto
 import ru.krupt.js.engine.dto.CallMetaData
+import ru.krupt.js.engine.dto.CallWithoutBodyDto
 import ru.krupt.js.engine.errors.CallNotFoundException
 import ru.krupt.js.engine.repository.CallRepository
 import ru.krupt.js.engine.util.unwrap
 import java.io.IOException
 import java.io.InputStream
+import java.util.stream.Collectors
 import javax.validation.Validator
 
 @Service
@@ -32,7 +34,7 @@ class CallStorageService(
     }
 
     fun getCallInvocationInfo(callName: String) =
-            callRepository.findInvocationInfoByNameIgnoreCase(callName)?.getInvocationInfo()
+            callRepository.findOneWithoutBodyByNameIgnoreCase(callName)?.invocationInfo
                     ?: throw CallNotFoundException(callName)
 
     fun parseInputStreamAndSaveCall(inputStream: InputStream, callName: String): CallFullInfoDto {
@@ -69,7 +71,7 @@ class CallStorageService(
     fun createOrUpdateCall(callName: String,
                            callMetaData: CallMetaData,
                            callBody: String): CallEntity {
-        var callEntity: CallEntity? = callRepository.findOneByNameIgnoreCase(callName)
+        var callEntity = callRepository.findOneByNameIgnoreCase(callName)
         callEntity = if (callEntity != null) {
             val copy = callEntity.copy(description = callMetaData.description,
                     invocationInfo = callMetaData.invocationInfo,
@@ -92,4 +94,16 @@ class CallStorageService(
     fun getCallById(callId: Long) = CallFullInfoDto.fromEntity(
             callRepository.findById(callId).unwrap()
                     ?: throw CallNotFoundException(callId.toString()))
+
+    fun deleteCall(callName: String) {
+        if (callRepository.deleteByNameIgnoreCase(callName) == 0) {
+            throw CallNotFoundException(callName)
+        }
+    }
+
+    fun getAll(): List<CallWithoutBodyDto> =
+            callRepository.findAllWithoutBodyBy()
+                    .stream()
+                    .map(CallWithoutBodyDto.Companion::fromEntity)
+                    .collect(Collectors.toList())
 }

@@ -1,7 +1,7 @@
 package ru.krupt.js.engine.util
 
 import ru.krupt.js.engine.variable.DataType
-import ru.krupt.js.engine.variable.Variable
+import ru.krupt.js.engine.variable.Parameter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -14,12 +14,13 @@ fun <T> Optional<T>.unwrap(): T? = orElse(null)
 /**
  * Get a value for a variable based on the type of variable
  */
-fun Variable.getOrConvertValue(value: Any?) = getOrConvertValueForVariableType(type, value)
+fun Parameter.getOrConvertValue(value: Any?) = getOrConvertValueForVariableType(type, value)
 
 private fun getOrConvertValueForVariableType(dataType: DataType, value: Any?): Any? {
     if (value == null) {
         return null
     }
+    @Suppress("REDUNDANT_ELSE_IN_WHEN")
     when (dataType) {
         DataType.BOOLEAN -> {
             if (value is Boolean) {

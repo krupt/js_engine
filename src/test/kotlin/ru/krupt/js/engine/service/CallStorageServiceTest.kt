@@ -15,7 +15,7 @@ import ru.krupt.js.engine.domain.CallEntity
 import ru.krupt.js.engine.repository.CallRepository
 import ru.krupt.js.engine.variable.DataType
 import ru.krupt.js.engine.variable.InvocationInfo
-import ru.krupt.js.engine.variable.Variable
+import ru.krupt.js.engine.variable.Parameter
 import javax.validation.Validator
 
 @RunWith(SpringRunner::class)
@@ -45,8 +45,8 @@ class CallStorageServiceTest {
         assertEquals("Этот колл проверяет существование клиента", description)
 
         val expectedInvocationInfo = InvocationInfo(
-                setOf(Variable(name = "CLIENT_ID", type = DataType.TEXT)),
-                setOf(Variable(name = "EXISTS", type = DataType.BOOLEAN)))
+                setOf(Parameter(name = "CLIENT_ID", type = DataType.TEXT)),
+                setOf(Parameter(name = "EXISTS", type = DataType.BOOLEAN)))
         assertEquals(expectedInvocationInfo, invocationInfo)
 
         val expectedBody = this.javaClass.getResourceAsStream("/call/simple_case.js")
@@ -73,7 +73,7 @@ class CallStorageServiceTest {
         assertEquals("Возвращает текущую дату", description)
 
         val expectedInvocationInfo = InvocationInfo(
-                outputs = setOf(Variable(name = "CURRENT_DATE", type = DataType.DATE)))
+                outputs = setOf(Parameter(name = "CURRENT_DATE", type = DataType.DATE)))
         assertEquals(expectedInvocationInfo, invocationInfo)
 
         val expectedBody = this.javaClass.getResourceAsStream("/call/get_date.js")

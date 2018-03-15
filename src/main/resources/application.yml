@@ -17,6 +17,7 @@ spring:
       org.hibernate.envers:
         revision_type_field_name: rev_type
         do_not_audit_optimistic_locking_field: false
+        store_data_at_delete: true
     show-sql: true
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
